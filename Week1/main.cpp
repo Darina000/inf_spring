@@ -4,7 +4,7 @@
 
 int main() {
     // insert code here...
-    std::cout << "Hello, World!\n";
+    std::cout << "World!\n";
     std::cout << "Hello" << std::endl;
     std::cout << "New" << std::endl;
     
