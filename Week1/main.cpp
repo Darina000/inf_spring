@@ -10,6 +10,6 @@ int main() {
     std::cout << "New" << std::endl;
     int w = 3;
     int a = 4;
-    int c = 6;
+    int c = 3;
     return 0;
 }
