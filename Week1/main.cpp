@@ -9,5 +9,6 @@ int main(int argc, const char * argv[]) {
     std::cout << "New" << std::endl;
     
     int a = 4;
+    int c = 6;
     return 0;
 }
