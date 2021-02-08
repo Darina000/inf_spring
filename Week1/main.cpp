@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-int main(int argc, const char * argv[]) {
+int main() {
     // insert code here...
     std::cout << "World!\n";
     std::cout << "Hello" << std::endl;
