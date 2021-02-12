@@ -76,7 +76,7 @@ int main()
     
     f();
     
-    std::cout << "Microseconds: " << timer.elapsedMicroseconds() << std::endl;
+    std::cout << "Microsecond: " << timer.elapsedMicroseconds() << std::endl;
     
     timer.contin();
     
