@@ -66,7 +66,7 @@ int main()
     Timer timer;
     timer.start();
     
-    std::cout << "Microseconds: " << timer.elapsedMicroseconds()<< std::endl;
+    std::cout << "Microsecond: " << timer.elapsedMicroseconds()<< std::endl;
     
     f();
 
