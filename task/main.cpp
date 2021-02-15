@@ -2,53 +2,54 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
+#include <algorithm>
+#include <functional>
 
 class Timer
 {
+public:
+    
+    using clock_t = std::chrono::steady_clock;
+    using time_point_t = clock_t::time_point;
+    
+    Timer(): m_begin(clock_t::now()){}
+    
+    ~Timer() noexcept
+    {
+     //  m_bRunning = false;
+        
+        auto end = clock_t::now();
+        a += std::chrono::duration_cast <std::chrono::microseconds>(end - m_begin).count();
+        
+        std::cout << "micro " << a << std::endl;
+           
+        try
+            {
+                uninitialize();
+            }
+            catch (...)
+            {
+                // std::abort();
+            }
+        }
 private:
-    std::chrono::time_point<std::chrono::system_clock> m_StartTime;
-    std::chrono::time_point<std::chrono::system_clock> m_EndTime;
-    bool m_bRunning = false;
+    time_point_t m_begin;
+    double a = 0;
     
 public:
-    Timer(): m_StartTime(std::chrono::system_clock::now()), m_bRunning(false), m_EndTime(std::chrono::system_clock::now())  {
+    void stop(){
+        auto en = clock_t::now();
+        a += std::chrono::duration_cast <std::chrono::microseconds>(en - m_begin).count();
+        std::cout << "stop  on " << a<< std::endl;
         
     }
-    ~Timer(){
-        m_bRunning = false;
-    }
-    void start()
-    {
-        m_StartTime = std::chrono::system_clock::now();
-        m_bRunning = true;
-    }
-    
-    void stop()
-    {
-        m_EndTime = std::chrono::system_clock::now();
-        m_bRunning = false;
-    }
-    
-    void contin(){
-        m_bRunning = true;
-    }
-    
-    double elapsedMicroseconds()
-    {
-        std::chrono::time_point<std::chrono::system_clock> endTime;
-        
-        if(m_bRunning)
-        {
-            endTime = std::chrono::system_clock::now();
-        }
-        else
-        {
-            endTime = m_EndTime;
-        }
-        
-        return std::chrono::duration_cast<std::chrono::microseconds>(endTime - m_StartTime).count();
-    }
-    
+
+    void dur(){
+        m_begin = clock_t::now();
+        std::cout << "dur from "  << a << std::endl;
+    };
+
+    void uninitialize(){};
 };
 
 void f(){
@@ -63,26 +64,20 @@ void f(){
 
 int main()
 {
-    Timer timer;
-    timer.start();
-    
-    std::cout << "Microsecond: " << timer.elapsedMicroseconds()<< std::endl;
-    
+    Timer t;
     f();
+    t.stop();
+    f();
+    f();
+    t.dur();
+    for (int i = 0; i < 5; i++){
+        f();
+    }
+    t.stop();
+    f();
+    t.dur();
+    f();
+        
+    return 0;
 
-    std::cout << "Microsecond: " << timer.elapsedMicroseconds() << std::endl;
-    
-    timer.stop();
-    
-    f();
-    
-    std::cout << "Microsecond: " << timer.elapsedMicroseconds() << std::endl;
-    
-    timer.contin();
-    
-    f();
-    
-    std::cout << "Microseconds: " << timer.elapsedMicroseconds() << std::endl;
-    
-    
 }
