@@ -27,15 +27,15 @@ int main()
     //емкость опять увеличилась в 2 раза
     
     std::cout << " #3 " << std::endl;
-    
     std::vector<int> v3;
-    v3.reserve(10000000);
-    std::cout << v3.capacity() << std::endl; // 10000000
-    for (int i = 1; i< 10002000; ++i){
-        v3.push_back(1);
+    try{
+        v3.reserve(v3.max_size());
     }
-    std::cout << v3.capacity() << std::endl; // 20000000
-    //емкость опять увеличилась в 2 раза, но думало значительно дольше..
+    catch(...){
+        std::cout << "exception" << std::endl;
+        std::cout << v3.capacity() << std::endl;
+    }
+    //емкость 0, получили исключение
     
 
     return  0;
