@@ -110,5 +110,7 @@ int main()
     Timer t;
     v5.sort(); //925533
     }
+    
+    // топ: vector, array, deque, forward_list, list
     return  0;
 }
