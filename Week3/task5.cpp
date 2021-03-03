@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <string>
 
@@ -9,47 +10,77 @@
 
 using namespace boost::multi_index;
 
-struct Rec
+class Dictionary
 {
-    std::string name;
-    int number;
-    struct ByName {}; struct ByPhone {}; struct ByAddr {};
+public:
+    struct Rec
+    {
+        std::string name;
+        int number;
+        
+        
+        
+        friend std::ostream &operator<<(std::ostream &o, const Rec &note)
+        {
+            return o << "name: " << note.name << "number: " << note.number;
+        }
+    };
+    
+    void print()
+    {
+        for (auto record : data.get<IndexType::ORD>())
+        {
+            std::cout << record << std::endl;
+        }
+    }
+
+    void insert(const Rec &note)
+    {
+        this->data.insert(note);
+    }
+
+    const Rec &operator[](std::size_t idx) const { return this->data.get<IndexType::RAND>()[idx]; }
+
+    Rec find(std::string name)
+    {
+        return *this->data.get<IndexType::HASH>().find(name);
+    }
+
+private:
+    enum IndexType
+    {
+        HASH,
+        ORD,
+        RAND
+    };
+
+    multi_index_container<
+        Rec, indexed_by<
+                 hashed_non_unique<
+                     member<Rec, std::string, &Rec::name>>,
+                 ordered_non_unique<
+                     member<Rec, std::string, &Rec::name>>,
+                 random_access<>>>
+        data;
 };
 
-using Rec_multi_index =  multi_index_container<Rec,
-    indexed_by<
-        
-        ordered_unique<
-            member <Rec, std::string, &Rec::name>>,
-        ordered_non_unique<
-            member<Rec, int, &Rec::number>>,
-        random_access<>,
-        hashed_non_unique <
-            member < Rec, int, &Rec::number > >
-    >
->;
+int main()
+{
+    Dictionary d;
+    d.insert({ "Basilisa", 34 });
+    d.insert({ "Minerva", 1 });
+    d.insert({ "Fedor", 12 });
 
-int main(){
-    Rec_multi_index people;
-    Rec r1 = { "Basilisa", 34 };
-    Rec r2 = { "Minerva", 1 };
-    Rec r3 = { "Fedor", 12 };
     
-    std::cout << "ok1 " << people.insert(r1).second << std::endl; // ok1 true
-    std::cout << "ok2 " << people.insert(r1).second << std::endl; // ok2 false
-    people.insert(r2);
-    people.insert(r3);
-
-    std::string find_id = "Basilisa";
-    std::cout << people.count(find_id) << std::endl;
+    std::cout << "Random" << d[0]   << std::endl;
     
     
-    auto & hashed_index = people.get < 1 > ();
-    std::cout << hashed_index.count(4) << std::endl;
+    std::cout << "Sorted" << std::endl;
+    d.print();
 
-    const auto & random_access_index = people.get < 2 > ();
-    std::cout << random_access_index[0].name << std::endl;
+    
+    std::cout << "Search" << d.find("Fedor") << std::endl;
+
 
     return 0;
 }
-

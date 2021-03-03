@@ -89,24 +89,24 @@ unsigned int PJWHash(std::string str)
 
 unsigned int ELFHash(std::string str)
 {
-   unsigned int hash = 0;
-   unsigned int x    = 0;
-   unsigned int i    = 0;
-    unsigned int length = str.length();
+unsigned int hash = 0;
+unsigned int x    = 0;
+unsigned int i    = 0;
+unsigned int length = str.length();
 
-   for (i = 0; i < length; ++i)
-   {
-      hash = (hash << 4) + (str[i]);
+for (i = 0; i < length; ++i)
+{
+  hash = (hash << 4) + (str[i]);
 
-      if ((x = hash & 0xF0000000L) != 0)
-      {
-         hash ^= (x >> 24);
-      }
+  if ((x = hash & 0xF0000000L) != 0)
+  {
+     hash ^= (x >> 24);
+  }
 
-      hash &= ~x;
-   }
+  hash &= ~x;
+}
 
-   return hash;
+return hash;
 }
 
 
@@ -192,24 +192,39 @@ unsigned int APHash(std::string str)
 int main(int argc, char ** argv)
 {
     std::set <unsigned int> Key;
+   
     
-
-        
-        
-        int n = 1000000;
-        int Colis = 0;
-        for (int i = 0; i<n; ++i){
-            std::size_t N = 10;
-            std::size_t length =  10;
-            std::set < std::string > words =  make_random_words(N, length);
-            
-            for (auto i : words){
-                if(!Key.insert(APHash(i)).second){
-                    ++Colis;
+    
+    unsigned int ((*arr[9]))(std::string);
+    arr[0] = RSHash;
+    arr[1] = JSHash;
+    arr[2] = PJWHash; //самый худший 
+    arr[3] = ELFHash;
+    arr[4] = BKDRHash;
+    arr[5] = SDBMHash;
+    arr[6] = DJBHash;
+    arr[7] = DEKHash;
+    arr[8] = APHash;
+    
+    std::vector <int> colis = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    
+    const std::size_t N = 1900000;
+    const std::size_t length =  10;
+    std::set < std::string > words =  make_random_words(N, length);
+    
+    
+    
+    for (int j = 0; j<9; ++j){
+            for (auto k : words){
+                if(!Key.insert(arr[j](k)).second){
+                    ++colis[j];
                 }
             }
-        }
-        std::cout << n << " " << Colis << std::endl;
+    }
+  //  std::cout << N << " " << std::endl;
+    for (auto f: colis){
+        std::cout << f << " ";
+    }
     
     
     return 0;

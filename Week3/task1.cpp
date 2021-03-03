@@ -70,20 +70,29 @@ int main()
     std::cin >> N;
     
     std::vector <int> c;
+    
+    for(int i = 0; i<N; ++i){
+        c.push_back(i);
+    }
     {
         std::set<int> b;
         Timer time;
         for(int i = 0; i<N; ++i){
-            b.insert(rand());
+            b.insert(c[i]);
         }
     }
     {
         std::vector<int> t;
         Timer time1;
         for(int i = 0; i<N; ++i){
-            t.push_back(rand());
+            t.push_back(c[i]);
         }
-        std::sort(begin(t), end(t));
+        std::sort(begin(t), end(t),  std::greater<int>());
     }
+    
+    
+    // N = 100: set: 243571, vector: 44638
+    // N = 10000: set: 13498113, vector: 1340106
+    // N = 100000: set: 116206375, vector: 9157211
     return  0;
 }
