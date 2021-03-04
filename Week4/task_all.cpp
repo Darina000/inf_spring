@@ -151,5 +151,21 @@ int main()
     print(v3);
     
     
+    
+    //extra
+    std::vector <int> v1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    unsigned int num1 = 0;
+   
+    std::sort(std::begin(v1), std::end(v1),[&num1]( unsigned int lhs, unsigned int rhs )
+              {++num1; return lhs < rhs;});
+    
+    std::cout << "in std::sort: " << num1 << std::endl;
+   
+    
+    unsigned int num2 = 0;
+    std::nth_element(v1.begin(), v1.begin()+1, v1.end(), [&num2]( unsigned int lhs, unsigned int rhs )
+                     {++num2; return lhs < rhs;});
+    
+    std::cout << "in std::nth_element: " << num1 << std::endl;
     return 0;
 }
