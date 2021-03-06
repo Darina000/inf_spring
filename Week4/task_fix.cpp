@@ -17,13 +17,19 @@ void print(std::vector <int> & v){
 auto isPrime(int n) {
     if (n < 1){
         return 0;}
-    for (auto k = 2; k < n; ++k) {
+    for (auto k = 2; k < std::sqrt(n); ++k) {
         if (n % k == 0){
             return 0;}
         else{
             return 1;}
     }
     return 0;
+}
+
+
+bool f(std::vector <int>& v1){
+    auto x = std::find_if(std::begin(v1), std::end(v1), [](auto n) {return isPrime(n); });
+    return !(x == std::end(v1));
 }
 
 
@@ -51,19 +57,18 @@ int main()
     
     
     //7
-    auto x = std::find_if(std::begin(v1), std::end(v1), [](auto n) {return isPrime(n); });
-    if (x == std::end(v1)){
-            std::cout << "No prime numbers " << std::endl;
-    }else{
-        std::cout << *x << " numbers" << std::endl;}
+    std::cout << f(v1);
     
     
     
     //9
-    std::mt19937 rng; // default constructed, seeded with fixed seed
-    std::vector <int> v2(v1.size());
-    std::generate_n(v2.begin(), v1.size(), std::ref(rng));
-    print(v2);
+    std::vector<int> v2(v1.size());
+    std::mt19937_64 m_gen;
+    std::uniform_int_distribution<int> dist(1, 100);
+
+    std::generate(v2.begin(), v2.end(), [&](){
+        return dist(m_gen);
+        });
     
     
     //12
@@ -73,8 +78,9 @@ int main()
     
     
     //16
-    std::nth_element(v3.begin(), std::next(v3.begin()), v3.end(), std::greater<int>());
+    std::nth_element(v3.begin(), std::next(v3.begin()), std::next(std::next(v3.begin())), std::greater<int>());
     std::cout << "top 3: " << v3[0] << " " << v3[1] << " " << v3[2] << std::endl;
+    
     
     //18
     std::vector<int> v4;
@@ -95,24 +101,27 @@ int main()
     //extra
     
     std::mt19937 rng; // default constructed, seeded with fixed seed
-    size_t n = 1000000000;
+    size_t n = 2000000;
     std::vector <int> v0(n);
     std::generate_n(v0.begin(), n, std::ref(rng));
+    std::vector <int> v00(n);
+    v00 = v0;
     
-
     unsigned int num1 = 0;
    
     std::sort(std::begin(v0), std::end(v0),[&num1]( unsigned int lhs, unsigned int rhs )
               {++num1; return lhs < rhs;});
     
     std::cout << "in std::sort: " << num1 << std::endl;
-   
     
+
+
     unsigned int num2 = 0;
-    std::nth_element(v0.begin(), v0.begin()+1, v0.end(), [&num2]( unsigned int lhs, unsigned int rhs )
+    std::nth_element(v00.begin(), std::next(v00.begin()), v00.end(), [&num2]( unsigned int lhs, unsigned int rhs )
                      {++num2; return lhs < rhs;});
     
-    std::cout << "in std::nth_element: " << num1 << std::endl;
+    std::cout << "in std::nth_element: " << num2 << std::endl;
+    
     
     
     
