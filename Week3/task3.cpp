@@ -57,9 +57,9 @@ std::size_t hash_value(const Types & ... args) noexcept
 int main(int argc, char ** argv)
 {
    std::set <std::size_t> Key;
-   int n = 10000;
+   int n = 1000000;
    const std::size_t length =  10;
-   const std::size_t N = 10000;
+   const std::size_t N = 10;
    std::set < std::string > words =  make_random_words(N, length);
    int Colis = 0;
    
@@ -71,6 +71,6 @@ int main(int argc, char ** argv)
        }
    }}
    
-   std::cout << n << " " << Colis << std::endl;
+   std::cout << Colis << std::endl;
    return 0;
 }
