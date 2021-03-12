@@ -7,10 +7,10 @@
 
 int main()
 {
-    std::regex time(R"(([0-2]?\d):[0-5]?\d:[0-5]?\d)");
-    std::regex dat(R"((([1-2]\d{3})-(([1][0-2])|([0]?[1-9]))-[0-31]?\d))");
+    std::regex time(R"((\d{2})(:[0-5]\d){2})");
+    std::regex dat(R"((([1-2]\d{3})-(([1][0-2])|([0][1-9]))-(([0-2]\d)|([3][0,1]))))");
     
-    const std::string data = "wede2001-04-01dgdr12:00:23hb";
+    const std::string data = "wede2001-04-30dgdr12:20:23hb";
     
     std::sregex_iterator begin(data.cbegin(), data.cend(), dat);
     std::sregex_iterator end;
