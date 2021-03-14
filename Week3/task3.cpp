@@ -54,23 +54,19 @@ std::size_t hash_value(const Types & ... args) noexcept
    return seed;
 }
 
-int main(int argc, char ** argv)
+int main()
 {
+    const std::size_t length =  10;
+    for (int n = 100000; n< 1000000; n+=100000){
    std::set <std::size_t> Key;
-   int n = 1000000;
-   const std::size_t length =  10;
-   const std::size_t N = 10;
-   std::set < std::string > words =  make_random_words(N, length);
+   std::set < std::string > words =  make_random_words(n, length);
    int Colis = 0;
-   
-   for (int i = 0; i< n; ++i){
    for (auto j: words){
-       int a = rand();
-       if(!Key.insert(hash_value(j, a)).second){
+       if(!Key.insert(hash_value(j, rand())).second){
            ++Colis;
        }
-   }}
-   
+   }
    std::cout << Colis << std::endl;
+    }
    return 0;
 }
