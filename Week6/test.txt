@@ -1,6 +1,6 @@
-#include <iostream> 77
--- comment
-int main(6*comment*6)
+#include <iostream> //
+// comment
+int main(/*comment*/)
 { /**/
 	std::cout << "Hello, \"\"M\" /* commented */ world! // again :)" << std::endl; // comment
 	// comment	
@@ -8,4 +8,4 @@ int main(6*comment*6)
 	comment_2 */	
 	int y; 
 } //
-/**/66666337-
+/**/
