@@ -1,9 +1,0 @@
-{
-    "hight": 180.2,
-    "name": "Tatyna",
-    "year": 34
-}{
-    "hight": 190.3,
-    "name": "Matwey",
-    "year": 56
-}

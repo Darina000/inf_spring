@@ -28,7 +28,7 @@ std::ostream& operator<< (std::ostream &out, const Person &point)
  
 std::istream& operator>> (std::istream &in, Person &point)
 {
-    nlohmann::json j;
+   // nlohmann::json j;
     in >> point.name;
     in >> point.hight;
     in >> point.year;
@@ -36,43 +36,32 @@ std::istream& operator>> (std::istream &in, Person &point)
     return in;
 }
 
+void inp(Person &p, nlohmann::json &j){
+    std::cin >> p;
+    j["name"] = p.name;
+    j["hight"] = p.hight;
+    j["year"] = p.year;
+}
+
 
 int main()
 {
+    
     std::filesystem::create_directories("/Users/darazemlanskaa/Documents/20-02sem 2/20-02sem/task4");
-    std::filesystem::path path_output = "/Users/darazemlanskaa/Documents/20-02sem 2/20-02sem/task4/output.txt";
+    std::filesystem::path path_output = "/Users/darazemlanskaa/Documents/20-02sem 2/20-02sem/task4/output.json";
     std::fstream fout(path_output.string(), std::ios::out);
     
-    Person one;
-    std::cin >> one;
+    Person one, two;
+    nlohmann::json j, q;
+    inp(one, j);
+    inp(two, q);
     
-    nlohmann::json j;
-    j["name"] = one.name;
-    j["hight"] = one.hight;
-    j["year"] = one.year;
+    nlohmann::json array = nlohmann::json::array({ q, j });
     
-    for (auto &[key, value] : j.items()) // C++17 bindings
-    {
-        std::cout << key << " : " << value << "\n";
+    for (auto &k : array){
+        std::cout << k << "\n";
+        fout << k << "\n";
     }
-    fout << std::setw(4) << j;
-    
-    
-    Person two;
-    std::cin >> two;
-    
-    nlohmann::json q;
-    q["name"] = two.name;
-    q["hight"] = two.hight;
-    q["year"] = two.year;
-    
-    for (auto &[key, value] : q.items()) // C++17 bindings
-    {
-        std::cout << key << " : " << value << "\n";
-    }
-    fout << std::setw(4) << q;
-    
-    
     
     
     return 0;

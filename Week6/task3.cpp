@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <filesystem>
-
+#include <sstream>
 
 auto compute_file_size(const std::filesystem::path & path)
 {
@@ -47,22 +47,45 @@ auto compute_directory_size(const std::filesystem::path & path)
 
 int main(){
     auto path = std::filesystem::current_path() / "/Users/darazemlanskaa/Documents/Week1/Week6";
-    std::cout << path << " " <<  compute_directory_size(path) << std::endl;
     if (!std::filesystem::exists(path))
     {
         std::cerr << "Path " << path << " does not exist.\n";
 
-        return EXIT_FAILURE;
+        return 0;
     }
+    try
+    {
+        std::filesystem::canonical(path).string();
+    }
+    catch (const std::filesystem::filesystem_error & exception)
+    {
+        std::cout << "exception: " << exception.what() << std::endl;
+    }
+    
+    std::cout << path << " " <<  compute_directory_size(path) << std::endl;
+    std::cout <<  std::endl;
+    
+    
+    
+    const int WIDTH = 30;
+    std::cout.setf(std::ios::fixed);
     
     for (const auto & entry : std::filesystem::directory_iterator(path)){
         
         auto ftime = std::filesystem::last_write_time(entry);
         const std::filesystem::path textExtension = entry.path().extension();
-        
         std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime);
-        std::cout << "time" << std::asctime(std::localtime(&cftime)) << '\n';
-        std::cout << entry.path() << " "  << entry.path().filename().string() << " " << compute_file_size(entry.path()) << " " << textExtension <<  std::endl;
+        
+        std::cout << entry.path()
+            <<  std::setw(WIDTH/2)
+            << entry.path().filename().string()
+            <<  std::setw(WIDTH)
+            << compute_file_size(entry.path())
+            <<  std::setw(WIDTH/2)
+            << textExtension
+            << std::setw(WIDTH/2)
+            <<  "time " <<  std::asctime(std::localtime(&cftime)) << std::endl;
+        
     }
     
     return 0;
