@@ -7,7 +7,9 @@
 #include <functional>
 #include <algorithm>
 #include <cstdlib>
-
+#include <cmath>
+#include <cerrno>
+#include <cfenv>
 #include <execution>
 
 class Timer
@@ -82,68 +84,87 @@ void parallel_for_each(Iterator first, Iterator last, Func f)
     }
 }
 
+
+template <class T> struct func{
+  T operator() (const T& x, const T& y) const {
+      return x*y/(std::exp(std::cosh(std::tan(0.3)*23456789 + std::cos(0.4*87697)))*(std::sin(M_PI*0.435)/(12.0)*(std::tan(std::cos(0.987*0.887697)))));
+  }
+};
+
 int main() {
     
-    td::cout << "for_each" << std::endl;
+    std::cout << "for_each" << std::endl;
         {
-            std::vector<int> nums{3, 4, 2, 8, 15, 267, 23, 42};
-            Timer t;
-            std::for_each(nums.begin(), nums.end(), [](const int& n) { std::cout << " " << n;});
+            std::vector < double > nums(400007, 0.5);
+                        Timer t;
+                        parallel_for_each(nums.begin(), nums.end(), [](double& n) {
+                            for (int i = 0; i< 40; ++i){
+                                n +=  std::exp(std::cosh(std::tan(0.3*i)*23456789 + std::cos(0.4*i*87697)))*(std::sin(i*M_PI)/(12.0)*(std::tan(i + std::cos(0.987*i*87697))));
+                             }
+                        });
         }
+    
+    
         std::cout << "parallel_for_each" << std::endl;
         {
-            std::vector<int> nums{3, 4, 2, 8, 15, 267, 23, 42};
+            std::vector < double > nums(400007, 0.5);
             Timer t;
-            parallel_for_each(nums.begin(), nums.end(), [](const int& n) { std::cout << " " << n;});
+            parallel_for_each(nums.begin(), nums.end(), [](double& n) {
+                for (int i = 0; i< 40; ++i){
+                    n +=  std::exp(std::cosh(std::tan(0.3*i)*23456789 + std::cos(0.4*i*87697)))*(std::sin(i*M_PI)/(12.0)*(std::tan(i + std::cos(0.987*i*87697))));
+                
+                 }
+            });
         }
         
         std::cout << "partial_sum" << std::endl;
         {
-            std::vector<int> nums{3, 4, 2, 8, 15, 267, 23, 42};
+            std::vector < double > nums(10'000'007, 0.5);
+            std::vector < double > nums2;
             Timer t;
-            std::partial_sum(nums.begin(), nums.end(), nums.begin(), std::multiplies<int>());
+           std::partial_sum(std::begin(nums), std::end(nums), std::back_insert_iterator(nums2),  func<double>());
+        
         }
         std::cout << "exclusive_scan" << std::endl;
         {
-            std::vector<int> nums{3, 4, 2, 8, 15, 267, 23, 42};
+            std::vector < double > nums(10'000'007, 0.5);
+            std::vector < double > nums2;
             Timer t;
-            std::exclusive_scan(nums.begin(), nums.end(),
-                          std::ostream_iterator<int>(std::cout, " "),
-                          1, std::multiplies<>{});
+            std::inclusive_scan(nums.begin(), nums.end(),
+                                std::back_insert_iterator(nums2), func<double>());
         }
         
         std::cout << "transform_reduce" << std::endl;
-        
-        {
-            std::vector<int> a{0, 1, 2, 3, 4};
-            std::vector<int> b{5, 4, 2, 3, 1};
-            Timer t;
-            std::transform_reduce(std::execution::seq, a.begin(), a.end(),b.begin(), 0.0
-                );
-        }
-        std::cout << "inner_product" << std::endl;
-        {
-            std::vector<int> a{0, 1, 2, 3, 4};
-            std::vector<int> b{5, 4, 2, 3, 1};
-            Timer t;
-            std::inner_product(a.begin(), a.end(), b.begin(), 0);
-        }
+           
+           {
+               std::vector < double > a(10'000'007, 0.1);
+               std::vector < double > b(10'000'007, 0.1);
+               Timer t;
+               std::transform_reduce(std::execution::seq, a.begin(), a.end(), b.begin(), 0.0, func<double>(), func<double>());
+           }
+           std::cout << "inner_product" << std::endl;
+           {
+               std::vector < double > a(10'000'007, 0.1);
+               std::vector < double > b(10'000'007, 0.2);
+               Timer t;
+               std::inner_product(a.begin(), a.end(), b.begin(), 0, func<double>(), func<double>());
+           }
     
     /*
      for_each
-      nanoseconds 35572
+     nanoseconds 1342676390
      parallel_for_each
-      nanoseconds 2111
+     nanoseconds 1305029906
      
      partial_sum
-      nanoseconds 421
+     nanoseconds 1795416398
      exclusive_scan
-      nanoseconds 1998
+     nanoseconds 1639263512
      
      transform_reduce
-      nanoseconds 666
+     nanoseconds 629173316
      inner_product
-      nanoseconds 274
+     nanoseconds 621786669
      */
     return 0;
 }

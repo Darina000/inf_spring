@@ -167,15 +167,20 @@ T parallel_accumulate(Iterator first, Iterator last, T init, T2 num_threads)
 
 int main()
 {
-    std::vector < int > v(100);
+    std::vector < int > v(600000);
 
     std::iota(v.begin(), v.end(), 1);
     
-    std::size_t number;
-    std::cin >> number;
+    std::size_t number[] = {1, 5, 50, 500, 3000, 5000, 8000, 10000};
+  //  std::cin >> number;
+   // std::vector <int> v;
+    
+    for (auto i: number){
     {
+        std::cout << i << " ";
         Timer time;
-        parallel_accumulate(v.begin(), v.end(), 0, number);
+        parallel_accumulate(v.begin(), v.end(), 0, i);
+    }
     }
     return 0;
 }
