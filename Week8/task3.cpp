@@ -4,15 +4,18 @@
 #include <condition_variable>
 #include <memory>
 #include <mutex>
+#include <vector>
 
 
-template < typename T, typename C >
+
+
+template <template<class...> class Container, typename T, typename C >
 class T_P_Queue
 {
 private:
 
     mutable std::mutex mut;
-    std::priority_queue < T , std::vector<T>, C> que;
+    std::priority_queue < T, Container<T>, C> que;
     std::condition_variable m_condition_variable;
     
     
@@ -102,7 +105,8 @@ public:
 
 int main()
 {
-    T_P_Queue < int, std::greater<int>> queue;
+   
+    T_P_Queue <std::vector, int, std::greater<int>> queue;
 
     queue.push(1);
     queue.push(3);
