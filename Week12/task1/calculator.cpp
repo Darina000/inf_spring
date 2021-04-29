@@ -35,10 +35,7 @@ void Calculator::calculate(sf::Vector2f center, float width, float height)
 			for (auto x = 0U; x < m_width; ++x)
 			{
 				std::complex < float > z( (-1.5 + 3.0 * x)/m_width*0.99-1.4, (1.5 - 3.0 * y)/m_height*0.99+1.5);
-                std::complex <float> c( -0.7, 0.27015) ;//rand() ,  rand()
-					//center.x - width  / 2.0f + dx * x,
-                    //center.y - height / 2.0f + dy * y
-				//);
+                std::complex <float> c( -0.7, 0.27015) ;
 
 				auto iteration = 0U;
 
