@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 		{
 			auto position = sf::Vector2f(i, j) * R + center;
 
-			particles[i][j] = std::make_shared < Particle >(position, position, sf::Vector2f(0.0f, 10.0f), r);
+			particles[i][j] = std::make_shared < Particle >(position, position, sf::Vector2f(0.0f, 1.0f), r);
 		}
 	}
 
