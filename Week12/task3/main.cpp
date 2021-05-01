@@ -6,7 +6,7 @@
 class Particle
 {
 public:
-    Particle(sf::Vector2f position, const float radius, const sf::Vector2f speed) :
+    Particle(sf::Vector2f position, const double radius, const sf::Vector2f speed) :
         m_position(position), m_radius(radius), m_speed(speed), disx(- m_speed.x, m_speed.x),  disy(- m_speed.y, m_speed.y)
     {}
 public:
@@ -22,15 +22,15 @@ public:
         if (m_position.x > W) m_position.x = 0.f; if (m_position.x < 0) m_position.x = static_cast<float>(W);
         if (m_position.y > H) m_position.y = 0.f; if (m_position.y < 0) m_position.y = static_cast<float>(H);
     }
-    sf::Vector2f getPosition() noexcept  {
+    auto getPosition() noexcept  {
         return m_position;
     }
-    sf::Vector2f getSpeed() noexcept {
+    auto getSpeed() noexcept {
         return m_speed;
     }
 private:
     sf::Vector2f m_position;
-    float m_radius;
+    double m_radius;
     sf::Vector2f m_speed;
     std::uniform_real_distribution<float> disx;
     std::uniform_real_distribution<float> disy;
@@ -40,21 +40,23 @@ private:
 class Visualizer
 {
 public:
-    Visualizer(int count, float width, float height): m_count(count), m_width(width), m_height(height), step(width / 20.0f), speed(10.f, 10.f)
+    Visualizer(int count, double width, double height): m_count(count), m_width(width), m_height(height), step(width / 20.0f), speed(10.f, 10.f)
     {
     }
-    bool isInside(Particle p, float xPos, float yPos, float step) {
+    bool isInside(Particle p, double xPos, double yPos, double step) {
         return ((p.getPosition().x < xPos) && (p.getPosition().x > (xPos - step)) && (p.getPosition().y < yPos) && (p.getPosition().y > (yPos - step)));
     }
-    void paintSquare(float step, float width, float height, sf::RenderWindow& window, std::vector < Particle > particles) {
+    
+    void paintSquare(float step, double width, double height, sf::RenderWindow& window, std::vector < Particle > particles) {
         for (auto i = step; i <= width; i += step) {
             for (auto j = step; j <= height; j += step) {
-                float counter = 0;
+                double counter = 0;
                 for (auto p : particles) {
                     if (isInside(p, i, j, step)) {
                         ++counter;
                     }
                 }
+                
                 sf::RectangleShape rectangle;
                 rectangle.setPosition(sf::Vector2f(i - step, j - step));
                 rectangle.setSize(sf::Vector2f(step, step));
@@ -99,12 +101,12 @@ public:
        }
    private:
        int m_count;
-       const float m_width ;
-       const float m_height ;
-        std::vector < Particle > particles;
+       const double m_width ;
+       const double m_height ;
+    std::vector < Particle > particles;
         std::random_device rd;
-        const float step;
-        sf::Vector2f speed;
+        const double step;
+        const sf::Vector2f speed;
    };
 
 
