@@ -13,23 +13,20 @@ int main(int argc, char** argv)
 	sf::Vector2f min_point(10.0f, 10.0f);
 	sf::Vector2f max_point(750.0f, 550.0f);
 
-	sf::Vector2f center = (min_point + max_point) * 0.5f;
-
 	using particle_t = System::particle_t;
 
-	const auto R = length(max_point - min_point) * 0.02f;
-	const auto count = 10U;
+	const auto k = length(max_point - min_point) * 0.05f;
 	const auto r = 3.0f;
 
-	std::array < std::array<particle_t, 10>, 10 > particles;
+    std::array < std::array<particle_t, 10>, 10 > particles;
 
-	for (int i = 0; i < 10; ++i) 
+	for (int i = 0; i < 10; ++i)
 	{
 		for (int j = 0; j < 10; ++j)
 		{
-			auto position = sf::Vector2f(i, j) * R + center;
+            auto position = sf::Vector2f(i, j);
 
-			particles[i][j] = std::make_shared < Particle >(position, position, sf::Vector2f(0.0f, 1.0f), r);
+			particles[i][j] = std::make_shared < Particle >(position*k, position*k, sf::Vector2f(0.0f, 1.0f), r);
 		}
 	}
 
